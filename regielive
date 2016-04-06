@@ -7,16 +7,18 @@ cookies='--load-cookies cookies.txt'
 salvare=$HOME
 
 #culori:
-negru='\E[1;30m' rosu='\e[1;31m' verde='\e[1;32m' verdes='\e[0;32m' verdef='\e[0;30;42m' galben='\e[1;33m' albastru='\e[1;34m' purpuriu='\e[1;35m' cyan='\e[1;36m' alb='\e[1;37m' esc='\e[0m'
+ verde='\e[1;32m' verdes='\e[0;32m' verdef='\e[0;30;42m' esc='\e[0m'
 ##########################
 ##########################
 ##########################
 
 wget  $agent --keep-session-cookies --save-cookies cookies.txt http://subtitrari.regielive.ro 2>/dev/null
 
-echo -e $verde"Intoduceti numele filmului/serialului pentru care doriti sa gasiti subtitrarea:"$esc $verdes
+echo -e $verde"Intoduceti numele filmului/serialului pentru care doriti sa gasiti subtitrarea:" 
 
 read -p "Film:  " film_cautat
+
+echo -e $verdes
 
 wget -O .tmp1 $agent  $cookies http://subtitrari.regielive.ro/cauta.html?s="$film_cautat" 2>/dev/null
 
@@ -24,9 +26,11 @@ cat .tmp1|grep 'class="titlu"'|grep subtitrari|sed 's/ /_/g;s/"/ /g'|awk '{print
 
 cat .tmp2|awk '{print $1}'|nl 
 
-echo -e $verde"Alegeti numarul filmului/serialului gasit pentru care doriti subtitrarea"$esc
+echo -e $verde"Alegeti numarul filmului/serialului gasit pentru care doriti subtitrarea" 
 
 read -p "Numarul:  " numar_film
+
+echo -e $verdes
 
 adresa_cumul_subtitrari=`cat .tmp2|sed -n "${numar_film}p" |awk '{print $2}'`
 
@@ -38,9 +42,11 @@ cat .tmp3|grep download_link|sed 's/ /_/g;s/"/ /g;s/>//g;s/</ /g'|awk '{print $3
 
 cat .tmp4|awk '{print $1}'|nl
 
-echo -e $verde"Intoduceti numarul subtitrarii pe care doriti sa o descarcati:"$esc
+echo -e $verde"Intoduceti numarul subtitrarii pe care doriti sa o descarcati:" 
 
 read -p "Numarul:  " numar_subtitrare
+
+echo -e $verdes
 
 adresa_subtitrare=`cat .tmp4|sed -n "${numar_subtitrare}p" |awk '{print "http://subtitrari.regielive.ro"$2}'`
 
