@@ -12,6 +12,8 @@ salvare=$HOME
 ##########################
 ##########################
 
+clear
+
 wget  $agent --keep-session-cookies --save-cookies cookies.txt http://subtitrari.regielive.ro 2>/dev/null
 
 echo -e $verde"Intoduceti numele filmului/serialului pentru care doriti sa gasiti subtitrarea:" 
@@ -50,15 +52,17 @@ echo -e $verdes
 
 adresa_subtitrare=`cat .tmp4|sed -n "${numar_subtitrare}p" |awk '{print "http://subtitrari.regielive.ro"$2}'`
 
-nume_zip=`cat .tmp4|sed -n "${numar_subtitrare}p"|awk '{print $1".zip"}'`
+nume_zip=`cat .tmp4|sed -n "${numar_subtitrare}p"|awk '{print $1}'`
  
 echo -e $verdef"Adresa subtitrare:  "$adresa_subtitrare $esc
 
 
-wget  -O $nume_zip $agent $cookies $adresa_subtitrare 2>/dev/null
+wget -O $nume_zip.zip $agent $cookies $adresa_subtitrare 2>/dev/null
 
-#unzip $nume_zip
 
-#mv *.srt $salvare
 
-trap "rm -f .tmp* index.* *.url cookies.txt" 0 1 2 5 15
+unzip $nume_zip.zip 2>/dev/null
+
+mv $nume_zip.* $salvare
+
+trap "rm -f .tmp* index.* *.url cookies.txt $nume_zip.zip" 0 1 2 5 15
